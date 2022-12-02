@@ -1,0 +1,77 @@
+{
+  "name": "create-react-component-tk",
+  "displayName": "Create React Component",
+  "description": "Create a React component",
+  "publisher": "tkcodesstuff",
+  "version": "0.0.1",
+  "repository": "https://github.com/khengsaurus/create-react-component",
+  "engines": {
+    "vscode": "^1.73.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "license": "MIT",
+  "activationEvents": [
+    "onCommand:create-react-component.create",
+    "onCommand:create-react-component.create-flat"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "create-react-component.create-flat",
+        "title": "Create React component on this level"
+      },
+      {
+        "command": "create-react-component.create",
+        "title": "Create React component in this folder"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "true",
+          "command": "create-react-component.create-flat",
+          "group": "extensions@100"
+        },
+        {
+          "when": "explorerResourceIsFolder",
+          "command": "create-react-component.create",
+          "group": "extensions@101"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "create-react-component.create",
+          "when": "false"
+        },
+        {
+          "command": "create-react-component.create-flat",
+          "when": "false"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.73.0",
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.1.0",
+    "typescript": "^4.8.4",
+    "@vscode/test-electron": "^2.2.0"
+  }
+}
