@@ -13,6 +13,11 @@ export function getResourceDir(dir: string) {
   return dir.slice(0, s);
 }
 
+/**
+ * @return
+ * - Enters without input -> ""
+ * - Cancels/escape input box -> undefined
+ */
 export function getYesNo(title: string) {
   return vscode.window.showInputBox({
     title,
@@ -41,6 +46,6 @@ export function getTerminalInstance(): vscode.Terminal {
   });
 }
 
-export function getStylesheetName(scss: boolean, mod: boolean) {
-  return `styles${mod ? ".module" : ""}.${scss ? "s" : ""}css`;
+export function getStylesheetSuffix(mod: boolean, scss: boolean) {
+  return `${mod ? "module." : ""}${scss ? "scss" : "css"}`;
 }

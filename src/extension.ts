@@ -1,42 +1,98 @@
+import { existsSync } from "fs";
 import * as vscode from "vscode";
 import {
+  getCreateBarrelCommand,
   getCreateComponentCommand,
   getCreateFolderCommand,
   getCreateStylesheetCommand,
 } from "./commands";
 import {
   getResourceDir,
-  getStylesheetName,
+  getStylesheetSuffix,
   getTerminalInstance,
   getYesNo,
   toBoolean,
 } from "./util";
 
 function createCallback(path: string) {
-  let name = "";
   let ts = true;
   let scss = true;
   let mod = true;
+  let barrel = false;
+  let useComponentFileName = false;
+  let componentName = "";
+  let componentFileName = "";
+  let stylesheetName = "";
   vscode.window
     .showInputBox({ title: "Name of your React component:" })
     .then((_name) => {
       if (!_name?.trim()) {
         throw new Error("Invalid name");
       }
-      name = _name.charAt(0).toUpperCase() + _name.slice(1);
+      componentName = _name.charAt(0).toUpperCase() + _name.slice(1);
+      const dir = `${path}/${componentName}`;
+      if (existsSync(dir)) {
+        vscode.window.showInputBox({
+          title: `We can't use that name - there's already a directory here called '${componentName}'`,
+          placeHolder: "Press enter or escape to exit",
+        });
+        throw new Error();
+      }
     })
     .then(() => getYesNo("Would you like to use TypeScript?"))
     .then((res) => (ts = toBoolean(res)))
     .then(() => getYesNo("How about SCSS?"))
     .then((res) => (scss = toBoolean(res)))
-    .then(() => getYesNo("Final question - fancy a CSS module?"))
+    .then(() => getYesNo("Fancy a CSS module?"))
     .then((res) => (mod = toBoolean(res)))
     .then(() => {
+      const suffix = ts ? "tsx" : "jsx";
+      return getYesNo(
+        `Would you like to name your component file '${componentName}.${suffix}'? If not, 'index.${suffix}' will be used.`
+      );
+    })
+    .then((res) => {
+      const suffix = ts ? "tsx" : "jsx";
+      useComponentFileName = toBoolean(res);
+      componentFileName = useComponentFileName
+        ? `${componentName}.${suffix}`
+        : `index.${suffix}`;
+    })
+    .then(() => {
+      const suffix = getStylesheetSuffix(mod, scss);
+      return getYesNo(
+        `Would you like to name your stylesheet '${componentName}.${suffix}'? If not, 'styles.${suffix}' will be used.`
+      );
+    })
+    .then((res) => {
+      const suffix = getStylesheetSuffix(mod, scss);
+      stylesheetName = toBoolean(res)
+        ? `${componentName}.${suffix}`
+        : `styles.${suffix}`;
+    })
+    .then(() =>
+      useComponentFileName
+        ? getYesNo("Would you like a barrel file?")
+        : Promise.resolve("n")
+    )
+    .then((res) => (barrel = toBoolean(res)))
+    .then(() => {
       const terminal = getTerminalInstance();
-      const stylesheet = getStylesheetName(scss, mod);
-      terminal.sendText(getCreateFolderCommand(path, name));
-      terminal.sendText(getCreateStylesheetCommand(path, name, stylesheet));
-      terminal.sendText(getCreateComponentCommand(path, name, ts, stylesheet));
+      const commands = [
+        getCreateFolderCommand(path, componentName),
+        getCreateStylesheetCommand(path, componentName, stylesheetName),
+        getCreateComponentCommand(
+          path,
+          componentName,
+          ts,
+          stylesheetName,
+          useComponentFileName
+        ),
+      ];
+      commands.forEach((c) => terminal.sendText(c));
+      if (barrel) {
+        terminal.sendText(getCreateBarrelCommand(path, componentName, ts));
+      }
     });
 }
 
