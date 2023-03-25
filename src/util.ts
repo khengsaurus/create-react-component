@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-export const terminalName = "create-react-component-terminal-instance";
+export const terminalName = "create-react-component-terminal";
 
 export function getResourceDir(dir: string) {
   let s = dir.length;

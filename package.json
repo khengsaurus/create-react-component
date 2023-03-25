@@ -3,7 +3,7 @@
   "displayName": "Create React Component",
   "description": "Create a React component",
   "publisher": "tkcodesstuff",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": "https://github.com/khengsaurus/create-react-component",
   "engines": {
     "vscode": "^1.73.0"
@@ -13,7 +13,7 @@
   ],
   "license": "MIT",
   "activationEvents": [
-    "onCommand:create-react-component.create",
+    "onCommand:create-react-component.create-nested",
     "onCommand:create-react-component.create-flat"
   ],
   "main": "./out/extension.js",
@@ -24,7 +24,7 @@
         "title": "Create React component on this level"
       },
       {
-        "command": "create-react-component.create",
+        "command": "create-react-component.create-nested",
         "title": "Create React component in this folder"
       }
     ],
@@ -37,13 +37,13 @@
         },
         {
           "when": "explorerResourceIsFolder",
-          "command": "create-react-component.create",
+          "command": "create-react-component.create-nested",
           "group": "extensions@101"
         }
       ],
       "commandPalette": [
         {
-          "command": "create-react-component.create",
+          "command": "create-react-component.create-nested",
           "when": "false"
         },
         {

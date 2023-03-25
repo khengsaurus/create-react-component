@@ -4,7 +4,6 @@ import {
   getCreateFolderCommand,
   getCreateStylesheetCommand,
 } from "./commands";
-
 import {
   getResourceDir,
   getStylesheetName,
@@ -19,9 +18,7 @@ function createCallback(path: string) {
   let scss = true;
   let mod = true;
   vscode.window
-    .showInputBox({
-      title: "Name of your React component:",
-    })
+    .showInputBox({ title: "Name of your React component:" })
     .then((_name) => {
       if (!_name?.trim()) {
         throw new Error("Invalid name");
@@ -44,8 +41,8 @@ function createCallback(path: string) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  const create = vscode.commands.registerCommand(
-    "create-react-component.create",
+  const createNested = vscode.commands.registerCommand(
+    "create-react-component.create-nested",
     (uri: vscode.Uri) => {
       if (uri?.fsPath) {
         createCallback(uri.fsPath);
@@ -62,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(create, createFlat);
+  context.subscriptions.push(createNested, createFlat);
 }
 
 export function deactivate() {
