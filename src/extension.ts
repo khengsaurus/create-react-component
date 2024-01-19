@@ -61,14 +61,14 @@ function createCallback(path: string) {
     .then(() => {
       const suffix = getStylesheetSuffix(mod, scss);
       return getYesNo(
-        `Would you like to name your stylesheet '${componentName}.${suffix}'? If not, 'styles.${suffix}' will be used.`
+        `Would you like to name your stylesheet 'styles.${suffix}'? If not, '${componentName}.${suffix}' will be used.`
       );
     })
     .then((res) => {
       const suffix = getStylesheetSuffix(mod, scss);
       stylesheetName = toBoolean(res)
-        ? `${componentName}.${suffix}`
-        : `styles.${suffix}`;
+        ? `styles.${suffix}`
+        : `${componentName}.${suffix}`;
     })
     .then(() =>
       useComponentFileName

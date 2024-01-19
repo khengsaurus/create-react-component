@@ -22,10 +22,10 @@ export function getCreateComponentCommand(
     : `import './${stylesheet}';\n`;
 
   const contents = `import React from 'react';\n${importStyles}\n${
-    ts ? `interface I${name} {\n  //\n}\n\n` : ``
-  }const ${name} = (props${
-    ts ? `: I${name}` : ``
-  }) => {\n  return <div></div>;\n};\n
+    ts ? `type ${name}Props = {\n  //\n}\n\n` : ``
+  }function ${name}(props${
+    ts ? `: ${name}Props` : ``
+  }) {\n  return <div></div>;\n};\n
 export default ${name};`;
 
   const fileName = `${useComponentFileName ? name : "index"}.${
@@ -40,5 +40,5 @@ export function getCreateBarrelCommand(
   ts: boolean
 ) {
   const barrelFile = `${path}/${name}/index.${ts ? "ts" : "js"}`;
-  return `echo "export { default } from './${name}'" > ${barrelFile}`;
+  return `echo "export { default } from './${name}';" > ${barrelFile}`;
 }

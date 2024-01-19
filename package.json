@@ -3,7 +3,7 @@
   "displayName": "Create React Component",
   "description": "Create a React component",
   "publisher": "tkcodesstuff",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "repository": "https://github.com/khengsaurus/create-react-component",
   "engines": {
     "vscode": "^1.73.0"
